@@ -1,6 +1,0 @@
-{
-  "id": "deploy_key",
-  "buckets": [ "kevin-tsai-bucket"],
-  "access_key_id": "ABCDEFGHIJKLMNOPQRST",
-  "secret_access_key": "abcdefghijklmnopqrstuvwxyz01234567890ABC"
-}
