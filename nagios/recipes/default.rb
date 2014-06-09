@@ -3,7 +3,7 @@ package "nagios-nrpe-server"
 ##################
 # plugin install
 ##################
-plugin_dir = /usr/lib/nagios/plugins
+plugin_dir = "/usr/lib/nagios/plugins"
 
 cookbook_file "#{plugin_dir}/check_logfiles" do
   source "check_logfiles"
