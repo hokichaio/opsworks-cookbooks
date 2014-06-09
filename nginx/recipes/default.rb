@@ -65,7 +65,7 @@ template "#{node[:nginx][:dir]}/sites-available/default" do
 end
 
 Chef::Log.info("Kevin's manage conf start")
-template "#{node[:nginx][:dir]}/sites-available/default" do
+template "#{node[:nginx][:dir]}/sites-available/manage" do
   Chef::Log.info("Kevin's manage conf excuting")
   source "manage.erb"
   owner "root"
