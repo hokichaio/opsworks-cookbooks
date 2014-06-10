@@ -5,14 +5,14 @@
   <% end -%>
   DocumentRoot <%= @params[:docroot] %>
   RewriteEngine On
-
+  
   <Directory <%= @params[:docroot] %>>
     Options FollowSymLinks
     AllowOverride All
     Order allow,deny
     Allow from all
   </Directory>
-
+  
   <Directory />
     Options FollowSymLinks
     AllowOverride All
@@ -26,7 +26,7 @@
     Allow from 127.0.0.1
   </Location>
 
-  LogLevel <%= node[:apache][:log_level] %>
+  LogLevel info
   ErrorLog <%= node[:apache][:log_dir] %>/<%= @params[:name] %>-error.log
   CustomLog <%= node[:apache][:log_dir] %>/<%= @params[:name] %>-access.log combined
 

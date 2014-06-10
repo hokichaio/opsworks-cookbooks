@@ -64,16 +64,6 @@ template "#{node[:nginx][:dir]}/sites-available/default" do
   mode 0644
 end
 
-Chef::Log.info("Kevin's manage conf start")
-template "#{node[:nginx][:dir]}/sites-available/manage" do
-  Chef::Log.info("Kevin's manage conf excuting")
-  source "manage.erb"
-  owner "root"
-  group "root"
-  mode 0644
-end
-Chef::Log.info("Kevin's manage conf end")
-
 include_recipe "nginx::service"
 
 service "nginx" do
