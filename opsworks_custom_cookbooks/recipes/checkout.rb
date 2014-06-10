@@ -77,6 +77,8 @@ ruby_block 'Move single cookbook contents into appropriate subdirectory' do
   end
 end
 
+include_recipe "opsworks_custom_cookbooks::berkshelf"
+
 execute "ensure correct permissions of custom cookbooks" do
   command "chmod -R go-rwx #{node[:opsworks_custom_cookbooks][:destination]}"
   only_if do

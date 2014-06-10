@@ -20,7 +20,7 @@ default[:opsworks_custom_cookbooks][:enabled] = false
 default[:opsworks_custom_cookbooks][:user] = 'root'
 default[:opsworks_custom_cookbooks][:group] = 'root'
 default[:opsworks_custom_cookbooks][:home] = '/root'
-default[:opsworks_custom_cookbooks][:destination] = Chef::Config[:cookbook_path].select{|dir| dir =~ /site-cookbooks/}.first
+normal[:opsworks_custom_cookbooks][:destination] = Opsworks::InstanceAgent::Environment.site_cookbooks_path
 
 default[:opsworks_custom_cookbooks][:recipes] = []
 
@@ -33,5 +33,8 @@ default[:opsworks_custom_cookbooks][:scm][:repository] = nil
 
 default[:opsworks_custom_cookbooks][:scm][:revision] = 'HEAD'
 default[:opsworks_custom_cookbooks][:enable_submodules] = true
+
+default[:opsworks_custom_cookbooks][:gem_binary] = '/opt/aws/opsworks/local/bin/gem'
+default[:opsworks_custom_cookbooks][:gem_uninstall_options] = '--force --executables'
 
 include_attribute "opsworks_custom_cookbooks::customize"
