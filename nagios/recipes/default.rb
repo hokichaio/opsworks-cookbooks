@@ -36,7 +36,7 @@ end
 
 # check_logfiles.cfg
 cookbook_file "#{plugin_conf_dir}/check_logfiles.cfg" do
-  source "check_logfiles.cfg"
+  source node[:nagios][:check_logfile_config]
   mode 0644
   owner 'root'
   group 'root'
