@@ -2,8 +2,8 @@ node[:deploy].each do |depoy|
   if !File.symlink?(log_dir)
     log_dir = "#{depoy[:deploy_to]}/shared/log"
     log_mnt_dir = "/mnt/var/log/#{depoy[:application]}"
-    default_user = node[:deploy][application][:user]
-    default_group = node[:deploy][application][:group]
+    default_user = node[:deploy][:deploy_user][:user]
+    default_group = node[:deploy][:deploy_user][:group]
     directory log_dir do
       action :delete
     end

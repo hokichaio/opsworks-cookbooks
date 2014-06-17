@@ -1,4 +1,4 @@
-default[:deploy][application][:user] = node[:opsworks][:deploy_user][:user]
+default[:deploy][:deploy_user][:user] = 'deploy'
 case node[:platform]
 when 'debian','ubuntu'
   default[:opsworks][:deploy_user][:group] = 'www-data'
