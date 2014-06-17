@@ -1,11 +1,13 @@
-node[:deploy].each do |depoy|
+node[:deploy].each do |application, deploy|
+  log_dir = "/var/log/nginx"
+  log_mnt_dir = "/mnt/var/log/nginx"
+  default_user = node[:change_app_log][:user]
+  default_group = node[:change_app_log][:group]
   if !File.symlink?(log_dir)
-    log_dir = "#{depoy[:deploy_to]}/shared/log"
-    log_mnt_dir = "/mnt/var/log/#{depoy[:application]}"
-    default_user = node[:deploy][:deploy_user][:user]
-    default_group = node[:deploy][:deploy_user][:group]
+    log "creating link for nginx log"
     directory log_dir do
       action :delete
+      recursive true
     end
     directory log_mnt_dir do
       action :create
@@ -17,6 +19,9 @@ node[:deploy].each do |depoy|
       to log_mnt_dir
       owner default_user
       group default_group
+    end
+    service "nginx" do
+      action :reload
     end
   end
 end
