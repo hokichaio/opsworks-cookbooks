@@ -1,0 +1,63 @@
+proxy_cache_path  /mnt/var/cache/nginx/adsyst levels=1:2 keys_zone=adsyst-cache:128m max_size=256m inactive=4h;
+
+upstream adsyst {
+ server unix:/srv/www/adsyst/shared/sockets/unicorn.sock fail_timeout=0;
+}
+
+server {
+  listen 80;
+  server_name kevin.gamefactory.jp
+  
+  # Let's put all static files like images, js and css in sub-folder: public
+  root /srv/www/adsyst/current/public/;
+  
+  access_log /var/log/nginx/adsyst-access.log;
+  error_log /var/log/nginx/adsyst-error.log;
+
+  # ELB
+  set_real_ip_from 10.0.0.0/8;
+  real_ip_header X-FORWARDED-FOR;
+
+  # Cloud Flare CDN
+  set_real_ip_from   199.27.128.0/21;
+  set_real_ip_from   173.245.48.0/20;
+  set_real_ip_from   103.21.244.0/22;
+  set_real_ip_from   103.22.200.0/22;
+  set_real_ip_from   103.31.4.0/22;
+  set_real_ip_from   141.101.64.0/18;
+  set_real_ip_from   108.162.192.0/18;
+  set_real_ip_from   190.93.240.0/20;
+  set_real_ip_from   188.114.96.0/20;
+  set_real_ip_from   197.234.240.0/22;
+  set_real_ip_from   198.41.128.0/17;
+  set_real_ip_from   162.158.0.0/15;
+  real_ip_header     CF-Connecting-IP;
+  
+  location ~ ^/assets/ {
+    proxy_pass          http://adsyst;
+    proxy_set_header    X-Real-IP       $remote_addr;
+    proxy_set_header    X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header    Host            $http_host;
+    proxy_set_header    X-NginX-Proxy   true;
+    proxy_redirect      off;
+    proxy_cache         adsyst-cache;
+    proxy_cache_valid   200 302  60m;
+    proxy_cache_valid   404      1m;
+  }
+
+  location / {
+    proxy_pass          http://adsyst;
+    proxy_set_header    X-Real-IP       $remote_addr;
+    proxy_set_header    X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header    Host            $http_host;
+    proxy_set_header    X-NginX-Proxy   true;
+    proxy_redirect      off;
+  }
+  
+  gzip on;
+  gzip_comp_level 2;
+  gzip_proxied any;
+  gzip_min_length 1000;
+  gzip_disable "MSIE [1-6]\."
+  gzip_types text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript;
+}
