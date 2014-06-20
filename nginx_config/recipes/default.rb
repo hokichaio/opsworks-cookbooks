@@ -1,9 +1,9 @@
+nginx_dir = "/etc/nginx"
 node[:deploy].each do |k, v|
-  app_name = node[:deploy][k]
-  nginx_dir = "/etc/nginx"
+  app_name = k.to_s
   
   cookbook_file "#{nginx_dir}/sites-available/#{app_name}" do
-    source site
+    source app_name
     mode 0644
     owner 'root'
     group 'root'
@@ -14,5 +14,3 @@ end
 service "nginx" do
   action :reload
 end
-
-
