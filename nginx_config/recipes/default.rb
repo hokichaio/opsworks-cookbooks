@@ -1,21 +1,18 @@
-nginx_dir = "/etc/nginx"
-
-node[:nginx_config][:sites].each do |site|
-  cookbook_file "#{nginx_dir}/sites-available" do
+node[:deploy].each do |k, v|
+  app_name = node[:deploy][k]
+  nginx_dir = "/etc/nginx"
+  
+  cookbook_file "#{nginx_dir}/sites-available/#{app_name}" do
     source site
     mode 0644
     owner 'root'
     group 'root'
+    ignore_failure true
   end
+  
 end
-
-cookbook_file "#{nginx_dir}/conf.d" do
-  source "logformat.conf"
-  mode 0644
-  owner 'root'
-  group 'root'
-end
-
 service "nginx" do
   action :reload
 end
+
+
