@@ -1,0 +1,1 @@
+default[:nagios][:check_logfile_config] = "check_logfiles_adsyst.cfg"
