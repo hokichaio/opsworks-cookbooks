@@ -159,24 +159,11 @@ define :opsworks_deploy do
       ENV['HOME'] = "/root"
     end
   end
-
-  if deploy[:application_type] == 'rails' && node[:opsworks][:instance][:layers].include?('rails-app')
-    case node[:opsworks][:rails_stack][:name]
-
-    when 'apache_passenger'
-      passenger_web_app do
-        application application
-        deploy deploy
-      end
-
-    when 'nginx_unicorn'
-      unicorn_web_app do
-        application application
-        deploy deploy
-      end
-
-    else
-      raise "Unsupport Rails stack"
+  
+  if deploy[:application_type] == 'rails'
+    unicorn_web_app do
+      application application
+      deploy deploy
     end
   end
 

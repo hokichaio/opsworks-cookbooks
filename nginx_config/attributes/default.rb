@@ -1,1 +1,2 @@
-default[:nginx_config][:sites] = ["adsyst"]
+default[:nginx_config][:user] = 'www-data'
+default[:nginx_config][:group] = 'root'
