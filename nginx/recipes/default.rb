@@ -35,6 +35,10 @@ directory log_mnt_dir do
   mode 0755
   recursive true
 end
+directory node[:nginx][:log_dir] do
+  recursive true
+  action :delete
+end
 link node[:nginx][:log_dir] do
   to log_mnt_dir
   owner node[:nginx][:user]
@@ -42,14 +46,7 @@ link node[:nginx][:log_dir] do
 end
 
 #create cache dir in mnt
-cache_dir = "/mnt/var/cache"
 cache_nginx_dir = "/mnt/var/cache/nginx"
-directory cache_dir do
-  action :create
-  owner 'root'
-  group 'root'
-  recursive true
-end
 directory cache_nginx_dir do
   action :create
   owner node[:nginx][:user]
