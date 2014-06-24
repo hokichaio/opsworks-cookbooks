@@ -3,11 +3,8 @@ define :unicorn_web_app do
   application = params[:application]
   template_name = "nginx_unicorn_web_app.erb" 
 
-  node[:deploy].each do |k, v|
-    app_name = k.to_s
-    if app_name == "adsyst"
-      template_name = "adsyst.erb"
-    end
+  if application == "adsyst"
+    template_name = "adsyst.erb"
   end
 
   nginx_web_app deploy[:application] do
