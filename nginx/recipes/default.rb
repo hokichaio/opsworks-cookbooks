@@ -26,12 +26,35 @@ directory node[:nginx][:dir] do
   mode '0755'
 end
 
-if !File.symlink?(node[:nginx][:log_dir])
-  directory node[:nginx][:log_dir] do
-    mode 0755
-    owner node[:nginx][:user]
-    action :create
-  end
+#create log dir in mnt
+log_mnt_dir = "/mnt/var/log/nginx"
+directory log_mnt_dir do
+  action :create
+  owner node[:nginx][:user]
+  group 'root'
+  mode 0755
+  recursive true
+end
+link node[:nginx][:log_dir] do
+  to log_mnt_dir
+  owner node[:nginx][:user]
+  group 'root'
+end
+
+#create cache dir in mnt
+cache_dir = "/mnt/var/cache"
+cache_nginx_dir = "/mnt/var/cache/nginx"
+directory cache_dir do
+  action :create
+  owner 'root'
+  group 'root'
+  recursive true
+end
+directory cache_nginx_dir do
+  action :create
+  owner node[:nginx][:user]
+  group 'root'
+  recursive true
 end
 
 %w{sites-available sites-enabled conf.d}.each do |dir|
@@ -64,6 +87,13 @@ template "#{node[:nginx][:dir]}/sites-available/default" do
   owner "root"
   group "root"
   mode 0644
+end
+
+cookbook_file "#{node[:nginx][:dir]}/conf.d/logformat.conf" do
+  source "logformat.conf"
+  mode 0644
+  owner 'root'
+  group 'root'
 end
 
 include_recipe "nginx::service"
