@@ -26,10 +26,12 @@ directory node[:nginx][:dir] do
   mode '0755'
 end
 
-directory node[:nginx][:log_dir] do
-  mode 0755
-  owner node[:nginx][:user]
-  action :create
+if !File.symlink?(node[:nginx][:log_dir])
+  directory node[:nginx][:log_dir] do
+    mode 0755
+    owner node[:nginx][:user]
+    action :create
+  end
 end
 
 %w{sites-available sites-enabled conf.d}.each do |dir|
