@@ -11,7 +11,11 @@ when "amazon"
   default["s3fs"]["packages"] = %w{gcc libstdc++-devel gcc-c++ curl-devel libxml2-devel openssl-devel mailcap make fuse fuse-devel}
   default["fuse"]["version"] ="2.9.2"
 when "debian", "ubuntu"
-  default["s3fs"]["packages"] = %w{build-essential pkg-config libcurl4-openssl-dev libfuse-dev fuse-utils libfuse2 libxml2-dev mime-support}
+  if node["platform"] == "ubuntu" && node["platform_version"].to_f >= 14
+    default["s3fs"]["packages"] = %w{build-essential pkg-config libcurl4-openssl-dev libfuse-dev libfuse2 libxml2-dev mime-support}
+  else
+    default["s3fs"]["packages"] = %w{build-essential pkg-config libcurl4-openssl-dev libfuse-dev fuse-utils libfuse2 libxml2-dev mime-support}
+  end
   default["fuse"]["version"] = "2.8.7"
 end
 
